@@ -11,6 +11,7 @@
     <p id="result"></p>
     <button id="start-btn">Старт</button>
     <button id="stop-btn">Стоп</button>
+    <div id="result"></div>
     
     <script type="module">
       import { BrowserMultiFormatReader } from 'https://cdn.jsdelivr.net/npm/@zxing/browser@latest/+esm';
@@ -29,6 +30,23 @@
             if (result) {
               resultElem.textContent = 'Код: ' + result.text;
               controls.stop();
+              fetch(`http://192.168.50.183:80/run-parsing-check?invoice_link=${encodeURIComponent(result.text)}`, {
+                method: 'GET',
+                // headers: {
+                //     'invoice-link': encodeURIComponent(decodedText)
+                // }
+            })
+            .then(response => {
+                switch (response.status) {
+                    case 200:
+                        document.getElementById('result').innerHTML += `<div style="color:green;">Success</div>`;
+                        break;
+                    default:
+                        document.getElementById('result').innerHTML += `<div style="color:red;">Failed</div>`;
+                        break;
+                }
+                return response.text();
+            })
             }
           });
         } catch (e) {
