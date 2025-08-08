@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Сканер QR-кодов (ZXing)</title>
 </head>
 <body>
@@ -21,12 +22,12 @@
       const resultElem = document.getElementById('result');
       resultElem.textContent = 'Сканирование...';
 
-      codeReader = new ZXing.BrowserMultiFormatReader();
+      // Вот тут исправили: ZXingBrowser вместо ZXing
+      codeReader = new ZXingBrowser.BrowserMultiFormatReader();
       try {
         controls = await codeReader.decodeFromVideoDevice(null, video, (result, err) => {
           if (result) {
             resultElem.textContent = 'Код: ' + result.text;
-            // Можно остановить после первого успешного скана:
             controls.stop();
           }
         });
