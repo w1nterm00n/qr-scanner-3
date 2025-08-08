@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Сканер QR-кодов (ZXing)</title>
+</head>
+<body>
+  <h1>Сканировать QR/штрихкод</h1>
+  <video id="video" width="300" height="200" style="border:1px solid gray"></video>
+  <p id="result"></p>
+  <button id="start-btn">Старт</button>
+  <button id="stop-btn">Стоп</button>
+  
+  <script src="https://unpkg.com/@zxing/browser@latest"></script>
+  <script>
+    let codeReader;
+    let controls;
+
+    document.getElementById('start-btn').onclick = async () => {
+      const video = document.getElementById('video');
+      const resultElem = document.getElementById('result');
+      resultElem.textContent = 'Сканирование...';
+
+      codeReader = new ZXing.BrowserMultiFormatReader();
+      try {
+        controls = await codeReader.decodeFromVideoDevice(null, video, (result, err) => {
+          if (result) {
+            resultElem.textContent = 'Код: ' + result.text;
+            // Можно остановить после первого успешного скана:
+            controls.stop();
+          }
+        });
+      } catch (e) {
+        resultElem.textContent = 'Ошибка: ' + e;
+      }
+    };
+
+    document.getElementById('stop-btn').onclick = () => {
+      if (controls) controls.stop();
+      document.getElementById('result').textContent = 'Сканирование остановлено.';
+    };
+  </script>
+</body>
+</html>
