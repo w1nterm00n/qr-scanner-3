@@ -7,13 +7,7 @@
   </head>
   <body>
     <h1>Сканировать QR/штрихкод</h1>
-    <video id="video" playsinline style="
-    width: 100%;
-    max-width: 450px;
-    aspect-ratio: 4/3;
-    border: 1px solid gray;
-    background: #000;
-    "></video>
+    <video id="video" width="300" height="200" style="border:1px solid gray"></video>
     <p id="result"></p>
     <button id="start-btn">Старт</button>
     <button id="stop-btn">Стоп</button>
@@ -31,9 +25,7 @@
   
         codeReader = new BrowserMultiFormatReader();
         try {
-          controls = await codeReader.decodeFromVideoDevice(
-            { facingMode: 'environment' },
-            video, (result, err) => {
+          controls = await codeReader.decodeFromVideoDevice(null, video, (result, err) => {
             if (result) {
               resultElem.textContent = 'Код: ' + result.text;
               controls.stop();
