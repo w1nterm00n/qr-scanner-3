@@ -32,7 +32,7 @@
         codeReader = new BrowserMultiFormatReader();
         try {
           controls = await codeReader.decodeFromVideoDevice(
-            { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
+            { facingMode: 'environment' },
             video, (result, err) => {
             if (result) {
               resultElem.textContent = 'Код: ' + result.text;
